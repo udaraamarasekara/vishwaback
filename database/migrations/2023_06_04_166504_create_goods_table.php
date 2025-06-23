@@ -25,9 +25,9 @@ return new class extends Migration
             $table->string('job_number');
             $table->integer('stock_number');
             $table->integer('part_number');
-            $table->decimal('received_price_per_unit', 8, 2);
+            $table->decimal('received_price_per_unit', 8, 2)->nullable();
             $table->integer('quantity');
-            $table->decimal('sale_price_per_unit', 8, 2);
+            $table->decimal('sale_price_per_unit', 8, 2)->nullable();
             $table->softDeletes($column = 'deleted_at', $precision = 0);
         });
     }
