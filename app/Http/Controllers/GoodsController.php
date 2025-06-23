@@ -106,13 +106,14 @@ class GoodsController extends Controller
             dd($e);
            }
         }
-        $finalData['deal_type']=1; 
+        $finalData['deal_type']='1'; 
         $finalData['amount']=$validatorPayment->validated()['amount'];
         $this->store($finalData);
     }
 
-    public function newGrn(Request $request)
+   public function newGrn(Request $request)
     {$finalData=[];
+        
         $validatorGood=$this->validateGoodData($request);
         if ($validatorGood->fails()) {
          return response()->json($validatorGood->errors());
@@ -121,7 +122,7 @@ class GoodsController extends Controller
        if ($validatorPayment->fails()) {
         return response()->json($validatorPayment->errors());
       }
-
+     
         foreach($validatorGood->validated()['data'] as $dataSet)
         {
            try{  
@@ -161,9 +162,20 @@ class GoodsController extends Controller
             dd($e);
            }
         }
-        $finalData['deal_type']=2; 
+        $finalData['deal_type']='2'; 
         $finalData['amount']=$validatorPayment->validated()['amount'];
-        $this->store($finalData);
+        return $this->store($finalData);
+    }
+
+    public function imageUpload($image)
+    {
+        
+
+        $path = $image->store('uploads', 'public');
+
+    
+
+        return response()->json($path);
     }
 
     public function goodsCount()
@@ -184,7 +196,7 @@ class GoodsController extends Controller
      */
     public function store(array $data)
     {
-        $this->authorize('create',Good::class);
+         $this->authorize('create',Good::class);
 
         return $this->goodService->create($data);
             
@@ -473,10 +485,11 @@ class GoodsController extends Controller
         'data.*.modal'=>'required|string|max:20',
         'data.*.category'=>'required|string|max:20',
         'data.*.dealer_id'=>'nullable|exists:dealers,id|integer',
-        'data.*.received_price_per_unit'=>'required|numeric|regex:/^\d{0,6}(\.\d{1,2})?$/',
+        'data.*.received_price_per_unit'=>'nullable|numeric|regex:/^\d{0,6}(\.\d{1,2})?$/',
         'data.*.sale_price_per_unit'=>'required|numeric|regex:/^\d{0,6}(\.\d{1,2})?$/',
         'data.*.job_number'=>'required|string|max:20',
         'data.*.unit'=>'required|string|max:20',
+        'data.*.img'=>'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         'data.*.quantity'=>'required|numeric|regex:/^\d{0,6}(\.\d{1,2})?$/',
         
         ]);

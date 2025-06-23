@@ -17,7 +17,7 @@ use App\Http\Controllers\BuiltInTasksController;
 |
 */
 
-Route::middleware('auth:sanctum')->group( function () {
+// Route::middleware('auth:sanctum')->group( function () {
     Route::apiResource('good',GoodsController::class)->except(['store']);
     Route::apiResource('admin',AdminController::class);
     Route::get('goodsCount',[GoodsController::class,'goodsCount']);
@@ -49,7 +49,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('profession',[AdminController::class,'newProfession']);
     Route::get('getProfessions',[AdminController::class,'getProfessions']);
 
-});
+// });
 Route::get('/',[UserController::class,'invalidRequest'])->name('error');
 Route::post('login',[UserController::class,'login']);
    

@@ -41,31 +41,33 @@ class GoodService
     {
       return $this->goodRepository->getByDealId($id);
     }
-
     public function create(array $dataArray)
-    {
+    {return 'uttige putho';
       try{
         $goodRowArry=[];
           DB::beginTransaction();
            $deal_group_id= $this->goodRepository->getDealGroupId()+1;
           foreach ($dataArray['data'] as $data )
          {  
-            
             try
             {
-              
                 DB::beginTransaction();
-                $data['dealer_id']=2;
+
+                $dataArray['deal_type']=='1' ? $data['existance']=0 : $data['existance']=1;
                 $data['deal_id']=$deal_group_id;
-                $data['stock_id']=$this->goodRepository->getDealGroupId()+1;
-                $data['part_id']=$this->goodRepository->getDealGroupId()+1;
+
+                //  $data['stock_number']=$this->goodRepository->getDealGroupId()+1;
+                $data['part_number']=$this->goodRepository->getDealGroupId()+1;
+                
                 $goodRow=   new GoodResource( $this->goodRepository->create($data)); 
-                if($dataArray['deal_type']=='income')
-                {
-                  $this->stockService->decrement($goodRow['item_code'],$goodRow['quantity']);
+                
+                if($dataArray['deal_type']=='1')
+                {$data['dealer_id']=1;
+                  //$this->goodRepository->addProjectPerGood($goodRow['id'],$dataArray['project_id']);
+                $this->stockService->decrement($goodRow['item_code'],$goodRow['quantity']);
                 }
                 else
-                {
+                {$data['dealer_id']=2;
                   $this->stockService->increment($goodRow['item_code'],$goodRow['quantity']); 
                 }
             
@@ -76,7 +78,6 @@ class GoodService
             catch(\Exception $e)
             {
               DB::rollBack();
-              dd($e);
               return $e;
             }
             }
@@ -90,12 +91,10 @@ class GoodService
           }   
           catch(\Exception $e)
           {
-            dd($e);
            DB::rollBack();
             return $e;
           }
     }
-
     public function update($id,array $data)
     {
         try

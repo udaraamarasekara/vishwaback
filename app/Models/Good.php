@@ -16,13 +16,15 @@ class Good extends Model
         "brand_id",
         "modal_id",
         "category_id",
-        "received_price_per_unit",
         "sale_price_per_unit",
         "job_number",
         "unit",
         "quantity",
         "dealer_id",
-        "deal_id"
+        "deal_id",
+        "stock_number",
+        "part_number",
+        "img"
         
     ];
 
